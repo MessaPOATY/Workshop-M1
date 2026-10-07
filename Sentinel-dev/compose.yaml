@@ -1,0 +1,80 @@
+# Sentinel-X : lance toute la stack avec UNE commande
+#   docker compose up -d --build
+#
+# Ports ouverts sur le réseau :
+#   8080 : dashboard + API (HTTP)
+#   1883 : broker MQTT (l'ESP8266 et l'IA y publient)
+# La base de données et l'API ne sont PAS exposées : elles ne se parlent qu'à l'intérieur de Docker.
+
+services:
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: sentinel-x-mosquitto
+    restart: unless-stopped
+    ports:
+      - "${MQTT_PORT:-1883}:1883"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - mosquitto_data:/mosquitto/data
+
+  database:
+    image: postgres:16-alpine
+    container_name: sentinel-x-database
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./api
+    container_name: sentinel-x-api
+    restart: unless-stopped
+    environment:
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      API_KEY: ${API_KEY}
+      PORT: 3000
+      MQTT_URL: mqtt://mosquitto:1883
+      MQTT_USER: ${MQTT_USER:-}
+      MQTT_PASSWORD: ${MQTT_PASSWORD:-}
+      DEFAULT_DEVICE_ID: ${DEFAULT_DEVICE_ID:-ESP001}
+    depends_on:
+      database:
+        condition: service_healthy
+      mosquitto:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/api/health || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+
+  dashboard:
+    build: ./dashboard
+    container_name: sentinel-x-dashboard
+    restart: unless-stopped
+    ports:
+      - "${DASHBOARD_PORT:-8080}:80"
+    volumes:
+      # captures d'image de l'IA : copier les fichiers dans ./snapshots
+      - ./snapshots:/usr/share/nginx/html/snapshots:ro
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  mosquitto_data:

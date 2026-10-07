@@ -1,0 +1,61 @@
+:root {
+  --fond: #E4E6F3;
+  --texte: #261E48;
+  --carte: #A1A6D4;
+  --blanc: #ffffff;
+  --ok: #2e7d32;
+  --warn: #ef6c00;
+  --erreur: #b00020;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: Montserrat, Arial, Helvetica, sans-serif;
+  background: var(--fond);
+  color: var(--texte);
+  margin: 0;
+  padding: 24px;
+}
+
+header { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+h1 { margin: 0; }
+h2 { margin-top: 0; font-size: 18px; }
+
+.hidden { display: none; }
+
+.statut { padding: 6px 14px; border-radius: 999px; font-size: 14px; color: var(--blanc); }
+.statut.ok { background: var(--ok); }
+.statut.warn { background: var(--warn); }
+.statut.error { background: var(--erreur); }
+
+.bandeau { background: #ffd54f; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; }
+
+.cartes { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.carte { background: var(--carte); border-radius: 12px; padding: 16px 24px; min-width: 170px; }
+.carte .titre { font-size: 14px; }
+.carte .valeur { font-size: 32px; font-weight: bold; }
+.carte .valeur.petit { font-size: 22px; }
+.carte .sous-titre { font-size: 12px; margin-top: 4px; }
+
+.zone { background: var(--blanc); border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+canvas { display: block; width: 100%; height: 220px; }
+
+.alertes { list-style: none; margin: 0; padding: 0; }
+.alertes li { padding: 8px 0; border-bottom: 1px solid var(--fond); display: flex; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+.alertes li:last-child { border-bottom: none; }
+.alertes .vide { color: var(--texte); }
+
+.badge { font-size: 12px; font-weight: bold; padding: 2px 8px; border-radius: 6px; color: var(--blanc); }
+.badge.critical { background: var(--erreur); }
+.badge.warning { background: var(--warn); }
+.badge.info { background: #1565c0; }
+.source { font-size: 12px; opacity: 0.7; }
+.heure { font-size: 12px; opacity: 0.7; margin-left: auto; }
+
+footer { font-size: 12px; opacity: 0.7; }
+
+/* alertes avec capture d'image */
+.vignette { flex-basis: 100%; }
+.vignette img { max-height: 90px; border-radius: 6px; border: 1px solid var(--carte); display: block; }
+.vignette .absente { font-size: 12px; opacity: 0.7; }

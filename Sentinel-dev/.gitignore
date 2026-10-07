@@ -1,0 +1,6 @@
+.env
+node_modules/
+*.log
+snapshots/*
+!snapshots/intrusion_demo.jpg
+!snapshots/LISEZMOI.txt

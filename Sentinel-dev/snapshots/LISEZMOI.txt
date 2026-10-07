@@ -1,0 +1,10 @@
+Captures d'image de la vision (IA)
+==================================
+Quand l'IA détecte une intrusion, son message MQTT contient le nom d'un fichier image
+(par exemple alerts/intrusion_20261006_100039.jpg).
+
+Pour que le dashboard affiche l'image, copier ce fichier dans CE dossier (snapshots/).
+Seul le nom du fichier compte, pas le dossier d'origine.
+Le dossier peut aussi être un dossier partagé ou synchronisé avec le PC de l'IA.
+
+intrusion_demo.jpg est l'image utilisée par le simulateur de test.

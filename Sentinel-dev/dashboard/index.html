@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sentinel-X – Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Sentinel-X</h1>
+    <div id="statut" class="statut warn">Connexion à l'API...</div>
+  </header>
+
+  <div id="simu" class="bandeau hidden">⚠ Données simulées – ce ne sont pas encore de vraies mesures</div>
+
+  <section class="cartes">
+    <div class="carte">
+      <div class="titre">Température</div>
+      <div class="valeur"><span id="temp">--</span> °C</div>
+    </div>
+    <div class="carte">
+      <div class="titre">Gaz</div>
+      <div class="valeur"><span id="gaz">--</span></div>
+    </div>
+    <div class="carte">
+      <div class="titre">Présence</div>
+      <div class="valeur" id="presence">--</div>
+    </div>
+    <div class="carte">
+      <div class="titre">Appareil</div>
+      <div class="valeur petit" id="appareil">--</div>
+      <div class="sous-titre" id="maj">--</div>
+    </div>
+  </section>
+
+  <section class="zone">
+    <h2>Température (°C)</h2>
+    <canvas id="graph-temp"></canvas>
+  </section>
+
+  <section class="zone">
+    <h2>Gaz</h2>
+    <canvas id="graph-gaz"></canvas>
+  </section>
+
+  <section class="zone">
+    <h2>Alertes</h2>
+    <ul id="alertes" class="alertes"></ul>
+  </section>
+
+  <footer>Actualisation automatique chaque seconde</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
